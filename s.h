@@ -9,6 +9,8 @@
 #define MAX_PATH_LEN 257
 #define MAX_SKIP_PATHS 10
 
+int totalDirs = 0;
+int totalFiles = 0;
 pthread_mutex_t mutex;
 
 typedef struct SearchConfig
@@ -21,5 +23,15 @@ typedef struct SearchConfig
     char skip_paths[MAX_SKIP_PATHS][MAX_PATH_LEN]; // 要跳过的目录或文件的路径
 } Task;
 
+typedef struct Node
+{
+    char path[MAX_PATH_LEN];
+    struct Node *next;
+} Node;
+Node *head = NULL;
+
 void count(const char *path, const Task *config, int depth);
 void *thread(void *arg);
+void addToList(const char *path);
+bool exists(const char *path);
+void freeList();
